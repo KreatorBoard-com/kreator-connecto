@@ -78,8 +78,8 @@ export default {
 				pastel: {
 					peach: '#f8d0c1',
 					pink: '#f3dbdf',
-					lavender: '#d9e0f0',
-					blue: '#c5d6f0',
+					lavender: '#ede8f5',
+					blue: '#7091e6',
 				}
 			},
 			borderRadius: {
@@ -152,8 +152,8 @@ export default {
 				xs: '2px',
 			},
 			backgroundImage: {
-				'gradient-soft': 'linear-gradient(to right, #f8d0c1, #f3dbdf, #d9e0f0)',
-				'gradient-soft-dark': 'linear-gradient(to right, #331d17, #2a1f24, #1e2335)',
+				'gradient-soft': 'linear-gradient(to right, #ede8f5, #7091e6)',
+				'gradient-soft-dark': 'linear-gradient(to right, #35303d, #2b3c66)',
 			},
 		}
 	},

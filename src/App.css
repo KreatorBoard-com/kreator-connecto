@@ -13,10 +13,10 @@
   transition: filter 300ms;
 }
 .logo:hover {
-  filter: drop-shadow(0 0 2em rgba(243, 219, 223, 0.7));
+  filter: drop-shadow(0 0 2em rgba(237, 232, 245, 0.7));
 }
 .logo.react:hover {
-  filter: drop-shadow(0 0 2em rgba(217, 224, 240, 0.7));
+  filter: drop-shadow(0 0 2em rgba(112, 145, 230, 0.7));
 }
 
 @keyframes logo-spin {
@@ -43,9 +43,9 @@
 }
 
 body {
-  background-image: linear-gradient(to right, #f8d0c1, #f3dbdf, #d9e0f0);
+  background-image: linear-gradient(to right, #ede8f5, #7091e6);
 }
 
 .dark body {
-  background-image: linear-gradient(to right, #331d17, #2a1f24, #1e2335);
+  background-image: linear-gradient(to right, #35303d, #2b3c66);
 }
