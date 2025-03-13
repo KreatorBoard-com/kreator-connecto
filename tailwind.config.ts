@@ -64,22 +64,16 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				kreator: {
-					50: '#f9eae5',
-					100: '#f3d6cc',
-					200: '#e9bdac',
-					300: '#dfa38c',
-					400: '#d68b6d',
-					500: '#cc734d',
-					600: '#c35a2e',
-					700: '#a34726',
-					800: '#82351e',
-					900: '#612416',
-				},
-				pastel: {
-					peach: '#f8d0c1',
-					pink: '#f3dbdf',
-					lavender: '#ede8f5',
-					blue: '#7091e6',
+					50: '#f0f9ff',
+					100: '#e0f2fe',
+					200: '#bae6fd',
+					300: '#7dd3fc',
+					400: '#38bdf8',
+					500: '#0ea5e9',
+					600: '#0284c7',
+					700: '#0369a1',
+					800: '#075985',
+					900: '#0c4a6e',
 				}
 			},
 			borderRadius: {
@@ -150,10 +144,6 @@ export default {
 			},
 			backdropBlur: {
 				xs: '2px',
-			},
-			backgroundImage: {
-				'gradient-soft': 'linear-gradient(to right, #ede8f5, #7091e6)',
-				'gradient-soft-dark': 'linear-gradient(to right, #35303d, #2b3c66)',
 			},
 		}
 	},
