@@ -2,10 +2,13 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { SignInButton, SignUpButton, UserButton, useAuth } from '@clerk/clerk-react';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { isSignedIn } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,9 +36,9 @@ const Navbar = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <a href="#" className="text-2xl font-semibold text-kreator-700">
+            <Link to="/" className="text-2xl font-semibold text-lavender-700">
               Kreator<span className="font-light">Board</span>
-            </a>
+            </Link>
           </div>
 
           {/* Desktop Navigation */}
@@ -47,15 +50,35 @@ const Navbar = () => {
           </nav>
 
           <div className="hidden md:flex items-center space-x-4">
-            <Button
-              variant="outline"
-              className="rounded-full px-6 py-2 hover:bg-kreator-50 hover:text-kreator-700 transition-all"
-            >
-              Login
-            </Button>
-            <Button className="rounded-full px-6 py-2 bg-kreator-600 hover:bg-kreator-700 transition-all">
-              Get Started
-            </Button>
+            {isSignedIn ? (
+              <>
+                <Link to="/dashboard">
+                  <Button
+                    variant="outline"
+                    className="rounded-full px-6 py-2 hover:bg-lavender-50 hover:text-lavender-700 transition-all"
+                  >
+                    Dashboard
+                  </Button>
+                </Link>
+                <UserButton afterSignOutUrl="/" />
+              </>
+            ) : (
+              <>
+                <SignInButton mode="modal">
+                  <Button
+                    variant="outline"
+                    className="rounded-full px-6 py-2 hover:bg-lavender-50 hover:text-lavender-700 transition-all"
+                  >
+                    Login
+                  </Button>
+                </SignInButton>
+                <SignUpButton mode="modal">
+                  <Button className="rounded-full px-6 py-2 bg-lavender-600 hover:bg-lavender-700 transition-all">
+                    Get Started
+                  </Button>
+                </SignUpButton>
+              </>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -122,17 +145,39 @@ const Navbar = () => {
             Future
           </a>
           <div className="pt-2 space-y-2">
-            <Button
-              variant="outline"
-              className="w-full rounded-full justify-center"
-            >
-              Login
-            </Button>
-            <Button
-              className="w-full rounded-full justify-center bg-kreator-600 hover:bg-kreator-700"
-            >
-              Get Started
-            </Button>
+            {isSignedIn ? (
+              <>
+                <Link to="/dashboard">
+                  <Button
+                    variant="outline"
+                    className="w-full rounded-full justify-center"
+                  >
+                    Dashboard
+                  </Button>
+                </Link>
+                <div className="flex justify-center py-2">
+                  <UserButton afterSignOutUrl="/" />
+                </div>
+              </>
+            ) : (
+              <>
+                <SignInButton mode="modal">
+                  <Button
+                    variant="outline"
+                    className="w-full rounded-full justify-center"
+                  >
+                    Login
+                  </Button>
+                </SignInButton>
+                <SignUpButton mode="modal">
+                  <Button
+                    className="w-full rounded-full justify-center bg-lavender-600 hover:bg-lavender-700"
+                  >
+                    Get Started
+                  </Button>
+                </SignUpButton>
+              </>
+            )}
           </div>
         </div>
       </div>
