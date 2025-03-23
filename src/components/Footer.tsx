@@ -1,4 +1,3 @@
-
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
@@ -10,7 +9,7 @@ const Footer = () => {
           <div className="col-span-1 md:col-span-2 lg:col-span-1">
             <a href="#" className="inline-block mb-6">
               <span className="text-2xl font-semibold text-kreator-700">
-                Kreator<span className="font-light">Dashboard</span>
+                Kreator<span className="font-light">Board</span>
               </span>
             </a>
             <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-xs">
@@ -83,7 +82,7 @@ const Footer = () => {
 
         <div className="mt-12 pt-6 border-t border-gray-200 dark:border-gray-800 flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 md:mb-0">
-            © {new Date().getFullYear()} Kreator Dashboard. All rights reserved.
+            © {new Date().getFullYear()} KreatorBoard. All rights reserved.
           </p>
           <div className="flex space-x-6">
             <a href="#" className="text-gray-600 dark:text-gray-400 hover:text-kreator-600 dark:hover:text-kreator-400 text-sm">

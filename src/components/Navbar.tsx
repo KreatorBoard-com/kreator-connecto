@@ -34,7 +34,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <a href="#" className="text-2xl font-semibold text-kreator-700">
-              Kreator<span className="font-light">Dashboard</span>
+              Kreator<span className="font-light">Board</span>
             </a>
           </div>
 

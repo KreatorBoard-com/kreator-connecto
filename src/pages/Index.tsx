@@ -44,7 +44,7 @@ const Index = () => {
               className="flex flex-col items-center"
             >
               <span className="text-3xl font-semibold text-kreator-700">
-                Kreator<span className="font-light">Dashboard</span>
+                Kreator<span className="font-light">Board</span>
               </span>
               <div className="mt-4 w-16 h-1 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                 <motion.div
