@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
-import { Instagram, Twitter, Facebook, Youtube, Linkedin } from 'lucide-react';
+import { BarChart3, PieChart, Users, Activity, Calendar, Settings, Home, MessageSquare, TrendingUp, LayoutDashboard } from 'lucide-react';
 
 const Hero = () => {
   return (
@@ -14,9 +14,9 @@ const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="mb-5 inline-flex items-center rounded-full border border-kreator-200 bg-white px-3 py-1 text-sm text-kreator-700 shadow-sm"
+            className="mb-5 inline-flex items-center rounded-full border border-lavender-200 bg-white px-3 py-1 text-sm text-lavender-700 shadow-sm"
           >
-            <span className="mr-1 inline-block h-2 w-2 rounded-full bg-kreator-500"></span>
+            <span className="mr-1 inline-block h-2 w-2 rounded-full bg-lavender-500"></span>
             <span>Revolutionizing Influencer Marketing</span>
           </motion.div>
           
@@ -32,7 +32,7 @@ const Hero = () => {
               <span className="relative z-10">Influencer & Brand</span>
               <span className={cn(
                 "absolute bottom-2 left-0 z-0 h-3 w-full",
-                "bg-gradient-to-r from-kreator-200 to-kreator-100"
+                "bg-gradient-to-r from-lavender-200 to-lavender-100"
               )}></span>
             </span>
             Collaboration Platform
@@ -58,20 +58,20 @@ const Hero = () => {
           >
             <Button 
               size="lg" 
-              className="rounded-full px-8 bg-kreator-600 hover:bg-kreator-700 hover:shadow-lg transition-all duration-300"
+              className="rounded-full px-8 bg-lavender-600 hover:bg-lavender-700 hover:shadow-lg transition-all duration-300"
             >
               Get Started
             </Button>
             <Button 
               variant="outline" 
               size="lg" 
-              className="rounded-full px-8 border-kreator-300 hover:bg-kreator-50 hover:text-kreator-700 transition-all duration-300"
+              className="rounded-full px-8 border-lavender-300 hover:bg-lavender-50 hover:text-lavender-700 transition-all duration-300"
             >
               Learn More
             </Button>
           </motion.div>
 
-          {/* Influencer Dashboard Preview */}
+          {/* KreatorBoard Dashboard Preview */}
           <motion.div 
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
@@ -79,7 +79,7 @@ const Hero = () => {
             className="mt-16 w-full max-w-5xl mx-auto relative"
           >
             <div className="rounded-xl overflow-hidden card-shadow glassmorphism">
-              <div className="absolute inset-0 bg-gradient-to-b from-kreator-100/20 to-kreator-200/20"></div>
+              <div className="absolute inset-0 bg-gradient-to-b from-lavender-100/20 to-lavender-200/20"></div>
               
               {/* Dashboard Interface */}
               <div className="relative p-6">
@@ -92,153 +92,146 @@ const Hero = () => {
                   </div>
                   <div className="flex-1 mx-4">
                     <div className="h-8 bg-white/80 dark:bg-gray-800/80 rounded-full w-1/3 mx-auto flex items-center justify-center px-4">
-                      <span className="text-sm font-medium text-kreator-700 dark:text-kreator-300">Influencer Dashboard</span>
+                      <span className="text-sm font-medium text-lavender-700 dark:text-lavender-300">KreatorBoard Dashboard</span>
                     </div>
                   </div>
-                  <div className="h-8 w-8 rounded-full bg-kreator-100 dark:bg-kreator-800"></div>
+                  <div className="h-8 w-8 rounded-full bg-lavender-100 dark:bg-lavender-800"></div>
                 </div>
                 
                 {/* Dashboard Content */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {/* Profile Section */}
-                  <div className="bg-white/80 dark:bg-gray-800/80 rounded-xl shadow-sm p-5">
-                    <div className="flex flex-col items-center">
-                      <div className="relative">
-                        <div className="h-24 w-24 rounded-full bg-gradient-to-r from-kreator-400 to-kreator-600 flex items-center justify-center text-white text-4xl font-light overflow-hidden">
-                          <img 
-                            src="/lovable-uploads/2687cad3-8def-4fa4-b52e-845f338d0aa0.png" 
-                            alt="Influencer profile"
-                            className="w-full h-full object-cover"
-                          />
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+                  {/* Sidebar */}
+                  <div className="md:col-span-3 bg-white/80 dark:bg-gray-800/80 rounded-xl shadow-sm p-5">
+                    <div className="flex flex-col space-y-1">
+                      <div className="flex items-center mb-6">
+                        <div className="h-10 w-10 rounded-lg bg-gradient-to-r from-lavender-400 to-lavender-600 flex items-center justify-center text-white">
+                          <LayoutDashboard size={20} />
                         </div>
-                        <div className="absolute -bottom-1 -right-1 h-7 w-7 rounded-full bg-kreator-500 text-white flex items-center justify-center border-2 border-white">
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                          </svg>
+                        <div className="ml-3">
+                          <div className="font-bold text-lg">KreatorBoard</div>
+                          <div className="text-xs text-gray-500">Management Suite</div>
                         </div>
                       </div>
                       
-                      <h3 className="mt-4 text-xl font-bold">Alex Rodriguez</h3>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">@alexcreator</p>
-                      <div className="mt-2 px-3 py-1 bg-kreator-50 dark:bg-kreator-900/50 text-kreator-600 dark:text-kreator-300 rounded-full text-xs">
-                        College Ambassador 🎓
-                      </div>
-                      
-                      <div className="mt-4 w-full">
-                        <div className="text-sm font-medium text-gray-500 mb-2">Social Media Following</div>
-                        <div className="space-y-3">
-                          {socialMediaAccounts.map((account, index) => (
-                            <div key={index} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700/30 rounded-lg">
-                              <div className="flex items-center">
-                                <div className="text-kreator-600 dark:text-kreator-400">
-                                  {account.icon}
+                      {sidebarItems.map((item, index) => (
+                        <div 
+                          key={index} 
+                          className={`flex items-center p-2 rounded-lg ${index === 0 ? 'bg-lavender-50 text-lavender-700 dark:bg-lavender-900/30 dark:text-lavender-400' : 'text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700/30'}`}
+                        >
+                          <div className="h-5 w-5">{item.icon}</div>
+                          <span className="ml-3 text-sm font-medium">{item.label}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {/* Main Dashboard */}
+                  <div className="md:col-span-9">
+                    <div className="grid grid-cols-1 gap-6">
+                      {/* Overview Section */}
+                      <div className="bg-white/80 dark:bg-gray-800/80 rounded-xl shadow-sm p-5">
+                        <div className="flex items-center justify-between mb-4">
+                          <h3 className="font-bold">Platform Overview</h3>
+                          <div className="flex space-x-1">
+                            <div className="px-3 py-1 text-xs bg-lavender-500 text-white rounded-full">Today</div>
+                            <div className="px-3 py-1 text-xs bg-white dark:bg-gray-700 rounded-full">Week</div>
+                            <div className="px-3 py-1 text-xs bg-white dark:bg-gray-700 rounded-full">Month</div>
+                          </div>
+                        </div>
+                        
+                        {/* Stats Grid */}
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                          {dashboardStats.map((stat, index) => (
+                            <div key={index} className="bg-gray-50 dark:bg-gray-700/30 p-3 rounded-lg">
+                              <div className="flex items-center justify-between">
+                                <div className="text-sm text-gray-500 dark:text-gray-400">{stat.label}</div>
+                                <div className={`h-8 w-8 rounded-full flex items-center justify-center ${stat.iconBg}`}>
+                                  {stat.icon}
                                 </div>
-                                <span className="ml-2 text-sm font-medium">{account.name}</span>
                               </div>
-                              <span className="font-semibold text-sm">{account.followers}</span>
+                              <div className="text-2xl font-bold mt-2">{stat.value}</div>
+                              <div className="text-xs flex items-center gap-1 mt-1">
+                                <span className={stat.trend > 0 ? "text-green-500" : "text-red-500"}>
+                                  {stat.trend > 0 ? "↑" : "↓"} {Math.abs(stat.trend)}%
+                                </span>
+                                <span className="text-gray-400">vs last week</span>
+                              </div>
                             </div>
                           ))}
                         </div>
                       </div>
                       
-                      <div className="mt-4 w-full">
-                        <div className="text-sm font-medium text-gray-500 mb-2">Engagement Rate</div>
-                        <div className="h-6 w-full bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
-                          <div 
-                            className="h-full bg-gradient-to-r from-kreator-400 to-kreator-600 rounded-full"
-                            style={{ width: '58%' }}
-                          >
-                            <div className="h-full flex items-center justify-center text-white text-xs font-medium">
-                              5.8%
-                            </div>
+                      {/* Charts & Activity */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {/* Campaign Success Chart */}
+                        <div className="bg-white/80 dark:bg-gray-800/80 rounded-xl shadow-sm p-5">
+                          <h4 className="font-semibold text-sm mb-4">Campaign Success Rate</h4>
+                          <div className="h-40 w-full bg-gray-50 dark:bg-gray-700/30 rounded-lg flex items-end justify-between p-3">
+                            {chartBars.map((bar, index) => (
+                              <div key={index} className="flex flex-col items-center">
+                                <div 
+                                  className="w-6 bg-gradient-to-t from-lavender-600 to-lavender-400 rounded-t-sm"
+                                  style={{ height: `${bar.height}%` }}
+                                ></div>
+                                <div className="text-xs mt-2">{bar.label}</div>
+                              </div>
+                            ))}
                           </div>
+                        </div>
+                        
+                        {/* Recent Activity */}
+                        <div className="bg-white/80 dark:bg-gray-800/80 rounded-xl shadow-sm p-5">
+                          <h4 className="font-semibold text-sm mb-4">Recent Activity</h4>
+                          <div className="space-y-3">
+                            {recentActivities.map((activity, index) => (
+                              <div key={index} className="flex items-start p-2 bg-gray-50 dark:bg-gray-700/30 rounded-lg">
+                                <div className={`mt-0.5 h-8 w-8 rounded-full flex items-center justify-center flex-shrink-0 ${activity.iconBg}`}>
+                                  {activity.icon}
+                                </div>
+                                <div className="ml-3">
+                                  <div className="text-sm font-medium">{activity.title}</div>
+                                  <div className="text-xs text-gray-500">{activity.time}</div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Upcoming Campaigns */}
+                      <div className="bg-white/80 dark:bg-gray-800/80 rounded-xl shadow-sm p-5">
+                        <h4 className="font-semibold mb-4">Upcoming Campaigns</h4>
+                        <div className="overflow-x-auto">
+                          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                            <thead>
+                              <tr>
+                                <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Campaign</th>
+                                <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Brand</th>
+                                <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Influencers</th>
+                                <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Start Date</th>
+                                <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                              </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                              {upcomingCampaigns.map((campaign, index) => (
+                                <tr key={index}>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm font-medium">{campaign.name}</td>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm">{campaign.brand}</td>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm">{campaign.influencers}</td>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm">{campaign.startDate}</td>
+                                  <td className="px-3 py-2 whitespace-nowrap text-sm">
+                                    <span className={`px-2 py-1 text-xs rounded-full ${campaign.statusClass}`}>
+                                      {campaign.status}
+                                    </span>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
                         </div>
                       </div>
                     </div>
                   </div>
-                  
-                  {/* Content Performance */}
-                  <div className="md:col-span-2 bg-white/80 dark:bg-gray-800/80 rounded-xl shadow-sm p-5">
-                    <div className="mb-4 flex items-center justify-between">
-                      <h3 className="font-bold">Portfolio & Content Performance</h3>
-                      <div className="flex space-x-1">
-                        <div className="px-3 py-1 text-xs bg-kreator-500 text-white rounded-full">All</div>
-                        <div className="px-3 py-1 text-xs bg-white dark:bg-gray-700 rounded-full">Images</div>
-                        <div className="px-3 py-1 text-xs bg-white dark:bg-gray-700 rounded-full">Videos</div>
-                      </div>
-                    </div>
-                    
-                    {/* Performance Stats */}
-                    <div className="grid grid-cols-3 gap-4 mb-4">
-                      {performanceStats.map((stat, index) => (
-                        <div key={index} className="bg-gray-50 dark:bg-gray-700/30 p-3 rounded-lg">
-                          <div className="text-sm text-gray-500 dark:text-gray-400">{stat.label}</div>
-                          <div className="text-xl font-bold">{stat.value}</div>
-                          <div className="text-xs flex items-center gap-1 mt-1">
-                            <span className={stat.trend > 0 ? "text-green-500" : "text-red-500"}>
-                              {stat.trend > 0 ? "↑" : "↓"} {Math.abs(stat.trend)}%
-                            </span>
-                            <span className="text-gray-400">vs last month</span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                    
-                    {/* Content Grid */}
-                    <div className="grid grid-cols-3 gap-3">
-                      {contentItems.map((item, index) => (
-                        <div key={index} className="aspect-square bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden relative group">
-                          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-2">
-                            <div className="text-white text-xs font-medium">{item.type}</div>
-                            <div className="flex items-center text-white/80 text-xs mt-1">
-                              <span className="flex items-center mr-2">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
-                                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                                </svg>
-                                {item.likes}
-                              </span>
-                              <span className="flex items-center">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
-                                  <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
-                                </svg>
-                                {item.comments}
-                              </span>
-                            </div>
-                          </div>
-                          <div className={`h-full w-full flex items-center justify-center text-kreator-500 ${item.type === 'Video' ? 'bg-kreator-50' : ''}`}>
-                            {item.type === 'Video' && (
-                              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                              </svg>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                    
-                    {/* Upcoming Partnerships */}
-                    <div className="mt-4">
-                      <h4 className="font-semibold text-sm mb-2">Upcoming Partnerships</h4>
-                      <div className="flex space-x-2 overflow-x-auto pb-2">
-                        {partnerships.map((partner, index) => (
-                          <div key={index} className="flex-shrink-0 w-16 h-16 rounded-lg bg-white dark:bg-gray-700 p-2 flex flex-col items-center justify-center border border-gray-200 dark:border-gray-600">
-                            <div className="h-6 w-6 bg-kreator-100 dark:bg-kreator-800 rounded-md mb-1"></div>
-                            <div className="text-xs font-medium truncate w-full text-center">{partner}</div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Bottom Navigation */}
-                <div className="mt-6 bg-white/60 dark:bg-gray-800/60 rounded-xl p-2 flex justify-around">
-                  {navItems.map((item, index) => (
-                    <div key={index} className={`flex flex-col items-center px-4 py-2 rounded-lg ${index === 0 ? 'bg-kreator-50 dark:bg-kreator-900/50 text-kreator-600 dark:text-kreator-300' : 'text-gray-500'}`}>
-                      <div>{item.icon}</div>
-                      <span className="text-xs mt-1">{item.label}</span>
-                    </div>
-                  ))}
                 </div>
               </div>
             </div>
@@ -252,7 +245,7 @@ const Hero = () => {
               className="absolute -top-5 -right-5 max-w-xs w-64 rounded-lg shadow-lg glassmorphism p-4 border border-white/40 dark:border-white/10"
             >
               <div className="flex items-start">
-                <div className="h-8 w-8 rounded-full bg-kreator-500 dark:bg-kreator-600 flex-shrink-0 flex items-center justify-center text-white">
+                <div className="h-8 w-8 rounded-full bg-lavender-500 dark:bg-lavender-600 flex-shrink-0 flex items-center justify-center text-white">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
                     <path d="M15 3h6v6"/>
@@ -260,16 +253,16 @@ const Hero = () => {
                   </svg>
                 </div>
                 <div className="ml-3">
-                  <div className="font-semibold text-sm">New Collaboration Request</div>
-                  <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">Fashion Brand is interested in your profile for their summer campaign.</div>
+                  <div className="font-semibold text-sm">New Partnership Formed</div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">Brand X has successfully partnered with 5 new influencers this week.</div>
                   <div className="mt-3 flex justify-end space-x-2">
-                    <div className="px-3 py-1 bg-kreator-600 text-white text-xs rounded-full">View Details</div>
+                    <div className="px-3 py-1 bg-lavender-600 text-white text-xs rounded-full">View Details</div>
                   </div>
                 </div>
               </div>
             </motion.div>
             
-            {/* Earnings element */}
+            {/* Analytics element */}
             <motion.div
               initial={{ opacity: 0, x: -20, y: 20 }}
               whileInView={{ opacity: 1, x: 0, y: 0 }}
@@ -277,14 +270,14 @@ const Hero = () => {
               viewport={{ once: true }}
               className="absolute -bottom-5 -left-5 max-w-xs w-56 rounded-lg shadow-lg glassmorphism p-4 border border-white/40 dark:border-white/10"
             >
-              <div className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Total Earnings</div>
-              <div className="text-2xl font-bold text-kreator-700 dark:text-kreator-300">$15,420.50</div>
+              <div className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Platform Growth</div>
+              <div className="text-2xl font-bold text-lavender-700 dark:text-lavender-300">+38.2%</div>
               <div className="text-xs text-green-600 mt-1 flex items-center">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
                   <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
                   <polyline points="17 6 23 6 23 12"></polyline>
                 </svg>
-                <span>+12.5% from last month</span>
+                <span>Quarter-over-quarter growth</span>
               </div>
             </motion.div>
           </motion.div>
@@ -294,95 +287,106 @@ const Hero = () => {
   );
 };
 
-// Social media accounts data
-const socialMediaAccounts = [
+// Sidebar items data
+const sidebarItems = [
+  { label: 'Dashboard', icon: <Home size={18} /> },
+  { label: 'Analytics', icon: <BarChart3 size={18} /> },
+  { label: 'Campaigns', icon: <Activity size={18} /> },
+  { label: 'Influencer Network', icon: <Users size={18} /> },
+  { label: 'Messages', icon: <MessageSquare size={18} /> },
+  { label: 'Calendar', icon: <Calendar size={18} /> },
+  { label: 'Settings', icon: <Settings size={18} /> }
+];
+
+// Dashboard stats data
+const dashboardStats = [
   { 
-    name: 'Instagram', 
-    followers: '125.4K',
-    icon: <Instagram size={16} />
+    label: 'Active Brands', 
+    value: '342', 
+    trend: 12.5,
+    icon: <Users size={16} className="text-white" />,
+    iconBg: 'bg-lavender-500 text-white'
   },
   { 
-    name: 'Twitter', 
-    followers: '87.2K',
-    icon: <Twitter size={16} />
+    label: 'Active Influencers', 
+    value: '1,205', 
+    trend: 8.3,
+    icon: <Users size={16} className="text-white" />,
+    iconBg: 'bg-indigo-500 text-white'
   },
   { 
-    name: 'Facebook', 
-    followers: '45.6K',
-    icon: <Facebook size={16} />
+    label: 'Revenue', 
+    value: '$128K', 
+    trend: 23.8,
+    icon: <TrendingUp size={16} className="text-white" />,
+    iconBg: 'bg-green-500 text-white'
   },
   { 
-    name: 'YouTube', 
-    followers: '220K',
-    icon: <Youtube size={16} />
-  },
-  { 
-    name: 'LinkedIn', 
-    followers: '32.5K',
-    icon: <Linkedin size={16} />
+    label: 'Campaigns', 
+    value: '85', 
+    trend: -3.2,
+    icon: <Activity size={16} className="text-white" />,
+    iconBg: 'bg-amber-500 text-white'
   }
 ];
 
-// Performance stats data
-const performanceStats = [
-  { label: 'Average Likes', value: '15.3K', trend: 7.2 },
-  { label: 'Engagement Rate', value: '5.8%', trend: 2.1 },
-  { label: 'Conversion Rate', value: '3.2%', trend: -0.5 }
+// Chart bars data
+const chartBars = [
+  { height: 65, label: 'Jan' },
+  { height: 40, label: 'Feb' },
+  { height: 55, label: 'Mar' },
+  { height: 75, label: 'Apr' },
+  { height: 85, label: 'May' },
+  { height: 90, label: 'Jun' }
 ];
 
-// Content items for the portfolio
-const contentItems = [
-  { type: 'Image', likes: '12.5K', comments: '342' },
-  { type: 'Video', likes: '8.2K', comments: '156' },
-  { type: 'Image', likes: '10.1K', comments: '278' },
-  { type: 'Image', likes: '9.7K', comments: '201' },
-  { type: 'Video', likes: '15.3K', comments: '425' },
-  { type: 'Image', likes: '11.2K', comments: '315' }
+// Recent activities data
+const recentActivities = [
+  { 
+    title: 'New influencer campaign launched', 
+    time: '10 minutes ago',
+    icon: <Activity size={16} className="text-white" />,
+    iconBg: 'bg-green-500 text-white'
+  },
+  { 
+    title: 'Brand onboarding completed', 
+    time: '1 hour ago',
+    icon: <Users size={16} className="text-white" />,
+    iconBg: 'bg-lavender-500 text-white'
+  },
+  { 
+    title: 'Analytics reports generated', 
+    time: '3 hours ago',
+    icon: <BarChart3 size={16} className="text-white" />,
+    iconBg: 'bg-amber-500 text-white'
+  }
 ];
 
-// Upcoming partnerships
-const partnerships = ['Nike', 'Adidas', 'Puma', 'Reebok', 'Under Armour'];
-
-// Navigation items
-const navItems = [
+// Upcoming campaigns data
+const upcomingCampaigns = [
   { 
-    label: 'Dashboard', 
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect width="7" height="9" x="3" y="3" rx="1" />
-        <rect width="7" height="5" x="14" y="3" rx="1" />
-        <rect width="7" height="9" x="14" y="12" rx="1" />
-        <rect width="7" height="5" x="3" y="16" rx="1" />
-      </svg>
-    )
+    name: 'Summer Collection', 
+    brand: 'Fashion Brand A', 
+    influencers: '15', 
+    startDate: 'June 15, 2023',
+    status: 'Preparing',
+    statusClass: 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-500'
   },
   { 
-    label: 'Messages', 
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-      </svg>
-    )
+    name: 'Product Launch', 
+    brand: 'Tech Company B', 
+    influencers: '25', 
+    startDate: 'June 20, 2023',
+    status: 'Confirmed',
+    statusClass: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-500'
   },
   { 
-    label: 'Analytics', 
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M21 21H3" />
-        <path d="M19 7v14" />
-        <path d="M13 10v11" />
-        <path d="M7 15v6" />
-      </svg>
-    )
-  },
-  { 
-    label: 'Settings', 
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
-        <circle cx="12" cy="12" r="3" />
-      </svg>
-    )
+    name: 'Holiday Special', 
+    brand: 'Retail Store C', 
+    influencers: '8', 
+    startDate: 'July 1, 2023',
+    status: 'Draft',
+    statusClass: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
   }
 ];
 
