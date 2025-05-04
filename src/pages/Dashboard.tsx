@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
 import { Navigate } from "react-router-dom";
@@ -10,7 +9,14 @@ import {
   Linkedin, 
   Users,
   BarChart,
-  Megaphone
+  Megaphone,
+  Star,
+  Trophy,
+  Badge,
+  Rocket,
+  Gift,
+  Diamond,
+  Crown
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -18,8 +24,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsItem, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsItem, TabsTrigger, TabsBadge } from "@/components/ui/tabs";
 import { toast } from "sonner";
+import { Progress } from "@/components/ui/progress";
+import { Switch } from "@/components/ui/switch";
 import { ChartContainer } from "@/components/ui/chart";
 import ReferralLeaderboard from "@/components/ReferralLeaderboard";
 import ReferralRewards from "@/components/ReferralRewards";
@@ -78,6 +86,12 @@ const Dashboard = () => {
   const [userRank, setUserRank] = useState(15);
   const [anonymousMode, setAnonymousMode] = useState(false);
   const [leaderboardPeriod, setLeaderboardPeriod] = useState<"weekly" | "monthly" | "all-time">("weekly");
+  const [vipWaitlistJoined, setVipWaitlistJoined] = useState(false);
+  const [vipLevel, setVipLevel] = useState(0);
+  const [vipPoints, setVipPoints] = useState(0);
+  const [showVipBadge, setShowVipBadge] = useState(true);
+  const [invitesSent, setInvitesSent] = useState(0);
+  const [tasksCompleted, setTasksCompleted] = useState(0);
   
   useEffect(() => {
     if (isSignedIn && user) {
@@ -94,6 +108,48 @@ const Dashboard = () => {
   const copyReferralLink = () => {
     navigator.clipboard.writeText(referralLink);
     toast.success("Referral link copied to clipboard!");
+  };
+
+  const joinVIPWaitlist = () => {
+    setVipWaitlistJoined(true);
+    setVipPoints(50);
+    toast({
+      title: "Welcome to the VIP Waitlist!",
+      description: "You've earned 50 points for joining. Complete tasks to climb the ranks!",
+      variant: "achievement",
+    });
+  };
+
+  const completeVIPTask = (taskPoints: number, taskName: string) => {
+    setVipPoints(prev => prev + taskPoints);
+    setTasksCompleted(prev => prev + 1);
+    
+    const newPoints = vipPoints + taskPoints;
+    // Check if we should level up
+    if (newPoints >= 200 && vipLevel < 1) {
+      setVipLevel(1);
+      toast({
+        title: "Level Up! 🎉",
+        description: "You're now VIP Bronze tier with early access to new features!",
+        variant: "achievement",
+      });
+    } else if (newPoints >= 500 && vipLevel < 2) {
+      setVipLevel(2);
+      toast({
+        title: "Level Up! 🎉",
+        description: "You're now VIP Silver tier with special perks and priority support!",
+        variant: "achievement",
+      });
+    } else if (newPoints >= 1000 && vipLevel < 3) {
+      setVipLevel(3);
+      toast({
+        title: "Level Up! 🎉",
+        description: "You're now VIP Gold tier with exclusive features and premium benefits!",
+        variant: "achievement",
+      });
+    }
+    
+    toast.success(`Task completed! +${taskPoints} points for ${taskName}`);
   };
 
   const shareOnSocial = (platform) => {
@@ -139,6 +195,33 @@ const Dashboard = () => {
     }
   };
 
+  // Get VIP tier badge and color based on level
+  const getVipTierInfo = () => {
+    switch(vipLevel) {
+      case 1:
+        return { name: "Bronze", color: "#CD7F32", icon: <Trophy className="h-5 w-5" /> };
+      case 2:
+        return { name: "Silver", color: "#C0C0C0", icon: <Badge className="h-5 w-5" /> };
+      case 3:
+        return { name: "Gold", color: "#FFD700", icon: <Diamond className="h-5 w-5" /> };
+      default:
+        return { name: "New Member", color: "#9b87f5", icon: <Star className="h-5 w-5" /> };
+    }
+  };
+
+  // Calculate the progress percentage to the next level
+  const getProgressToNextLevel = () => {
+    if (vipLevel === 0) {
+      return (vipPoints / 200) * 100;
+    } else if (vipLevel === 1) {
+      return ((vipPoints - 200) / 300) * 100;
+    } else if (vipLevel === 2) {
+      return ((vipPoints - 500) / 500) * 100;
+    } else {
+      return 100;
+    }
+  };
+
   if (!isLoaded) {
     return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
   }
@@ -146,6 +229,9 @@ const Dashboard = () => {
   if (!isSignedIn) {
     return <Navigate to="/sign-in" />;
   }
+
+  const vipTier = getVipTierInfo();
+  const nextLevelProgress = getProgressToNextLevel();
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -157,10 +243,16 @@ const Dashboard = () => {
           </h1>
           
           <Tabs defaultValue="overview" className="w-full">
-            <TabsList className="grid grid-cols-4 mb-8">
+            <TabsList className="grid grid-cols-5 mb-8">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="referrals">Referrals</TabsTrigger>
               <TabsTrigger value="leaderboard">Leaderboard</TabsTrigger>
+              <TabsItem>
+                <TabsTrigger value="vip" className="relative">
+                  VIP Program
+                  {showVipBadge && <TabsBadge count={1} pulse={true} />}
+                </TabsTrigger>
+              </TabsItem>
               <TabsTrigger value={userType}>{userType === "influencer" ? "Creator Profile" : "Brand Analytics"}</TabsTrigger>
             </TabsList>
             
@@ -438,6 +530,262 @@ const Dashboard = () => {
                   </div>
                 </CardContent>
               </Card>
+            </TabsContent>
+            
+            <TabsContent value="vip" className="space-y-6">
+              {!vipWaitlistJoined ? (
+                <Card className="overflow-hidden border-none shadow-md">
+                  <div className="bg-gradient-to-r from-lavender-600 to-lavender-800 p-10 text-white text-center relative">
+                    <div className="absolute top-5 left-5 bg-yellow-400 text-lavender-900 rounded-full px-4 py-1 text-xs font-bold flex items-center">
+                      <Star className="h-3 w-3 mr-1" /> EARLY ACCESS
+                    </div>
+                    <h2 className="text-3xl font-bold mb-4">Join the KreatorBoard VIP Program</h2>
+                    <p className="text-xl mb-8 max-w-2xl mx-auto">Get exclusive rewards, early access to new features, and special perks for our most valued users.</p>
+                    <Button 
+                      onClick={joinVIPWaitlist} 
+                      className="bg-white text-lavender-900 hover:bg-lavender-100 font-bold text-lg px-8 py-6"
+                      size="lg"
+                    >
+                      <Rocket className="mr-2 h-5 w-5" /> Join the VIP Waitlist
+                    </Button>
+                  </div>
+                  <CardContent className="bg-white p-8">
+                    <div className="grid md:grid-cols-3 gap-6">
+                      <div className="bg-lavender-50 p-6 rounded-lg text-center">
+                        <div className="mx-auto h-12 w-12 flex items-center justify-center bg-lavender-100 text-lavender-700 rounded-full mb-4">
+                          <Rocket className="h-6 w-6" />
+                        </div>
+                        <h3 className="font-bold mb-2">Early Access</h3>
+                        <p className="text-gray-600">Be the first to try new features and provide feedback.</p>
+                      </div>
+                      <div className="bg-lavender-50 p-6 rounded-lg text-center">
+                        <div className="mx-auto h-12 w-12 flex items-center justify-center bg-lavender-100 text-lavender-700 rounded-full mb-4">
+                          <Trophy className="h-6 w-6" />
+                        </div>
+                        <h3 className="font-bold mb-2">Exclusive Rewards</h3>
+                        <p className="text-gray-600">Earn points, badges, and real rewards for your engagement.</p>
+                      </div>
+                      <div className="bg-lavender-50 p-6 rounded-lg text-center">
+                        <div className="mx-auto h-12 w-12 flex items-center justify-center bg-lavender-100 text-lavender-700 rounded-full mb-4">
+                          <Diamond className="h-6 w-6" />
+                        </div>
+                        <h3 className="font-bold mb-2">Elite Status</h3>
+                        <p className="text-gray-600">Show off your prestigious status with custom badges and perks.</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ) : (
+                <>
+                  <div className="grid gap-6 md:grid-cols-[2fr_1fr]">
+                    <Card>
+                      <CardHeader className="bg-gradient-to-r from-lavender-600 to-lavender-800 text-white">
+                        <div className="flex justify-between items-center">
+                          <div>
+                            <CardTitle className="flex items-center text-2xl">
+                              Your VIP Status
+                              <span className="ml-2 flex items-center justify-center px-2 py-1 rounded-full bg-white text-lavender-800 text-sm">
+                                {vipTier.icon} {vipTier.name}
+                              </span>
+                            </CardTitle>
+                            <CardDescription className="text-lavender-100 mt-1">Complete tasks to earn points and climb the ranks</CardDescription>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-3xl font-bold">{vipPoints}</div>
+                            <div className="text-sm text-lavender-100">Total VIP Points</div>
+                          </div>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="pt-6">
+                        {vipLevel < 3 && (
+                          <div className="mb-6">
+                            <div className="flex justify-between items-center mb-2">
+                              <div className="text-sm font-medium">Next level: {vipLevel === 0 ? "Bronze" : vipLevel === 1 ? "Silver" : "Gold"}</div>
+                              <div className="text-sm text-gray-500">
+                                {vipPoints}/
+                                {vipLevel === 0 ? "200" : vipLevel === 1 ? "500" : "1000"} points
+                              </div>
+                            </div>
+                            <Progress value={nextLevelProgress} className="h-2" />
+                          </div>
+                        )}
+
+                        <div className="space-y-4">
+                          <h3 className="text-lg font-medium mb-3">VIP Tasks</h3>
+                          
+                          {/* Task cards */}
+                          <div className="grid gap-4">
+                            <div className="border border-lavender-200 p-4 rounded-lg flex justify-between items-center">
+                              <div className="flex gap-4 items-center">
+                                <div className="bg-lavender-100 p-2 rounded-full text-lavender-700">
+                                  <Share className="h-5 w-5" />
+                                </div>
+                                <div>
+                                  <p className="font-medium">Share on social media</p>
+                                  <p className="text-sm text-gray-500">Share KreatorBoard on your social networks</p>
+                                </div>
+                              </div>
+                              <Button 
+                                variant="outline" 
+                                className="whitespace-nowrap"
+                                onClick={() => completeVIPTask(100, "Social Media Share")}
+                              >
+                                +100 pts
+                              </Button>
+                            </div>
+
+                            <div className="border border-lavender-200 p-4 rounded-lg flex justify-between items-center">
+                              <div className="flex gap-4 items-center">
+                                <div className="bg-lavender-100 p-2 rounded-full text-lavender-700">
+                                  <Users className="h-5 w-5" />
+                                </div>
+                                <div>
+                                  <p className="font-medium">Invite 5 friends</p>
+                                  <p className="text-sm text-gray-500">Refer 5 friends to join KreatorBoard</p>
+                                </div>
+                              </div>
+                              <Button 
+                                variant="outline" 
+                                className="whitespace-nowrap"
+                                onClick={() => {
+                                  setInvitesSent(invitesSent + 5);
+                                  completeVIPTask(150, "Friend Invitations");
+                                }}
+                              >
+                                +150 pts
+                              </Button>
+                            </div>
+
+                            <div className="border border-lavender-200 p-4 rounded-lg flex justify-between items-center">
+                              <div className="flex gap-4 items-center">
+                                <div className="bg-lavender-100 p-2 rounded-full text-lavender-700">
+                                  <Gift className="h-5 w-5" />
+                                </div>
+                                <div>
+                                  <p className="font-medium">Complete your profile</p>
+                                  <p className="text-sm text-gray-500">Finish setting up your KreatorBoard profile</p>
+                                </div>
+                              </div>
+                              <Button 
+                                variant="outline" 
+                                className="whitespace-nowrap"
+                                onClick={() => completeVIPTask(75, "Profile Completion")}
+                              >
+                                +75 pts
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <div className="space-y-6">
+                      <Card>
+                        <CardHeader>
+                          <CardTitle>VIP Perks</CardTitle>
+                          <CardDescription>Benefits you've unlocked</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                          <div className="space-y-4">
+                            <div className={`flex gap-3 items-center p-3 rounded-lg ${vipLevel >= 0 ? "opacity-100" : "opacity-50"}`}>
+                              <Rocket className={`h-5 w-5 ${vipLevel >= 0 ? "text-lavender-600" : "text-gray-400"}`} />
+                              <div className="text-sm">Early access to new features</div>
+                            </div>
+                            
+                            <div className={`flex gap-3 items-center p-3 rounded-lg ${vipLevel >= 1 ? "opacity-100" : "opacity-50"}`}>
+                              <Badge className={`h-5 w-5 ${vipLevel >= 1 ? "text-lavender-600" : "text-gray-400"}`} />
+                              <div className="text-sm">Custom profile badge</div>
+                            </div>
+                            
+                            <div className={`flex gap-3 items-center p-3 rounded-lg ${vipLevel >= 2 ? "opacity-100" : "opacity-50"}`}>
+                              <Megaphone className={`h-5 w-5 ${vipLevel >= 2 ? "text-lavender-600" : "text-gray-400"}`} />
+                              <div className="text-sm">Featured in our newsletter</div>
+                            </div>
+                            
+                            <div className={`flex gap-3 items-center p-3 rounded-lg ${vipLevel >= 3 ? "opacity-100" : "opacity-50"}`}>
+                              <Diamond className={`h-5 w-5 ${vipLevel >= 3 ? "text-lavender-600" : "text-gray-400"}`} />
+                              <div className="text-sm">Priority support & free membership</div>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+
+                      <Card>
+                        <CardHeader>
+                          <CardTitle>VIP Settings</CardTitle>
+                          <CardDescription>Customize your VIP experience</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                          <div className="flex items-center justify-between">
+                            <Label htmlFor="show-badge">Show VIP notification badge</Label>
+                            <Switch
+                              id="show-badge"
+                              checked={showVipBadge}
+                              onCheckedChange={setShowVipBadge}
+                            />
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <Label htmlFor="email-updates">Email VIP updates</Label>
+                            <Switch
+                              id="email-updates"
+                              defaultChecked={true}
+                            />
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </div>
+
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>VIP Activity & Engagement</CardTitle>
+                      <CardDescription>Track your progress and interactions</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                          <h3 className="text-lg font-medium mb-4">Your VIP Stats</h3>
+                          <div className="space-y-3">
+                            <div className="flex justify-between items-center">
+                              <div className="text-sm">Tasks Completed</div>
+                              <div className="font-medium">{tasksCompleted}</div>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <div className="text-sm">Friends Invited</div>
+                              <div className="font-medium">{invitesSent}</div>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <div className="text-sm">Current Tier</div>
+                              <div className="font-medium flex items-center">
+                                <span style={{ color: vipTier.color }} className="mr-1">{vipTier.name}</span> 
+                                {vipTier.icon}
+                              </div>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <div className="text-sm">Days in Program</div>
+                              <div className="font-medium">1</div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div>
+                          <h3 className="text-lg font-medium mb-4">Upcoming VIP Events</h3>
+                          <div className="space-y-3">
+                            <div className="bg-lavender-50 p-3 rounded-lg">
+                              <div className="font-medium">Creator Showcase</div>
+                              <div className="text-sm text-gray-600">Exclusive event on May 15</div>
+                            </div>
+                            <div className="bg-lavender-50 p-3 rounded-lg">
+                              <div className="font-medium">VIP Webinar</div>
+                              <div className="text-sm text-gray-600">Learn marketing tips on May 28</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </>
+              )}
             </TabsContent>
             
             <TabsContent value="influencer" className="space-y-6">
