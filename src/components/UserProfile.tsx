@@ -1,14 +1,20 @@
 
 import React, { useState } from 'react';
-import { User } from "@clerk/clerk-react";
 import { Card, CardHeader, CardContent, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/tabs';
 import { Award, Trophy, Star, UserRound, Gift, Activity, Calendar, Sparkles, CheckCircle } from 'lucide-react';
 
+// Define our own User interface since Clerk's User type is not directly importable
+interface UserProfileData {
+  fullName?: string | null;
+  profileImageUrl?: string | null;
+  emailAddresses?: Array<{ emailAddress: string }>;
+}
+
 interface UserProfileProps {
-  user: User | null;
+  user: UserProfileData | null;
   totalReferrals: number;
   confirmedReferrals: number;
   pendingReferrals: number;
@@ -83,7 +89,7 @@ const UserProfile: React.FC<UserProfileProps> = ({
               </div>
               <div>
                 <CardTitle className="text-xl md:text-2xl text-orange-900">{user?.fullName || "User Name"}</CardTitle>
-                <CardDescription className="text-orange-700">{user?.emailAddresses[0].emailAddress || "user@example.com"}</CardDescription>
+                <CardDescription className="text-orange-700">{user?.emailAddresses?.[0]?.emailAddress || "user@example.com"}</CardDescription>
                 <div className="flex gap-2 mt-1">
                   <Badge className="bg-orange-500">{getVipLevelTitle()}</Badge>
                   <Badge variant="outline" className="border-orange-500 text-orange-800">Active {daysActive} days</Badge>
@@ -135,7 +141,7 @@ const UserProfile: React.FC<UserProfileProps> = ({
                   <span className="text-sm font-medium text-orange-800">Progress to {nextLevel.title}</span>
                   <span className="text-xs text-orange-600">{vipPoints} / {nextLevel.points} points</span>
                 </div>
-                <Progress value={progressToNextLevel} className="h-2 bg-beige-200" indicatorClassName="bg-orange-500" />
+                <Progress value={progressToNextLevel} className="h-2 bg-beige-200" />
               </div>
             </TabsContent>
             
