@@ -58,10 +58,33 @@ const TabsItem = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("", className)}
+    className={cn("relative", className)}
     {...props}
   />
 ))
 TabsItem.displayName = "TabsItem"
 
-export { Tabs, TabsList, TabsTrigger, TabsContent, TabsItem }
+// New component for displaying notifications on tabs
+const TabsBadge = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement> & { count?: number; pulse?: boolean }
+>(({ className, count, pulse = false, ...props }, ref) => {
+  if (!count) return null;
+  
+  return (
+    <div
+      ref={ref}
+      className={cn(
+        "absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-lavender-600 text-xs text-white",
+        pulse && "animate-pulse",
+        className
+      )}
+      {...props}
+    >
+      {count}
+    </div>
+  );
+});
+TabsBadge.displayName = "TabsBadge";
+
+export { Tabs, TabsList, TabsTrigger, TabsContent, TabsItem, TabsBadge }

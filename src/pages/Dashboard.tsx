@@ -21,6 +21,9 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsItem, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { ChartContainer } from "@/components/ui/chart";
+import ReferralLeaderboard from "@/components/ReferralLeaderboard";
+import ReferralRewards from "@/components/ReferralRewards";
+import ReferralStats from "@/components/ReferralStats";
 import {
   BarChart as RechartBarChart,
   Bar,
@@ -49,12 +52,32 @@ const mockAudienceData = [
   { age: '45+', percent: 5 },
 ];
 
+// Mock data for the leaderboard
+const mockLeaderboardEntries = [
+  { userId: "user1", name: "Alex Thompson", referrals: 24, position: 1 },
+  { userId: "user2", name: "Jamie Rodriguez", referrals: 18, position: 2 },
+  { userId: "user3", name: "Taylor Kim", referrals: 16, position: 3 },
+  { userId: "user4", name: "Jessie Morgan", referrals: 14, position: 4 },
+  { userId: "user5", name: "Jordan Lee", referrals: 13, position: 5 },
+  { userId: "user6", name: "Casey Smith", referrals: 11, position: 6 },
+  { userId: "user7", name: "Riley Johnson", referrals: 10, position: 7 },
+  { userId: "user8", name: "Quinn Brown", referrals: 8, position: 8 },
+  { userId: "user9", name: "Avery Davis", referrals: 7, position: 9 },
+  { userId: "user10", name: "Bailey Wilson", referrals: 6, position: 10 },
+];
+
 const Dashboard = () => {
   const { isLoaded, isSignedIn, user } = useUser();
   const [referralLink, setReferralLink] = useState("");
   const [userType, setUserType] = useState("influencer"); // Can be "influencer" or "brand"
   const [totalReferrals, setTotalReferrals] = useState(21);
+  const [pendingReferrals, setPendingReferrals] = useState(3);
+  const [confirmedReferrals, setConfirmedReferrals] = useState(18);
   const [rewardsEarned, setRewardsEarned] = useState(2);
+  const [weeklyChange, setWeeklyChange] = useState(3);
+  const [userRank, setUserRank] = useState(15);
+  const [anonymousMode, setAnonymousMode] = useState(false);
+  const [leaderboardPeriod, setLeaderboardPeriod] = useState<"weekly" | "monthly" | "all-time">("weekly");
   
   useEffect(() => {
     if (isSignedIn && user) {
@@ -97,6 +120,25 @@ const Dashboard = () => {
     }
   };
 
+  // Prepare leaderboard data with current user
+  const prepareLeaderboardData = () => {
+    if (!isSignedIn || !user) return mockLeaderboardEntries;
+
+    // Check if current user is in the top 10
+    const isUserInTop10 = mockLeaderboardEntries.some(entry => entry.userId === user.id);
+    
+    if (isUserInTop10) {
+      // Mark the user in the leaderboard
+      return mockLeaderboardEntries.map(entry => ({
+        ...entry,
+        isCurrentUser: entry.userId === user.id
+      }));
+    } else {
+      // Return the top 10 as is
+      return mockLeaderboardEntries;
+    }
+  };
+
   if (!isLoaded) {
     return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
   }
@@ -115,9 +157,10 @@ const Dashboard = () => {
           </h1>
           
           <Tabs defaultValue="overview" className="w-full">
-            <TabsList className="grid grid-cols-3 mb-8">
+            <TabsList className="grid grid-cols-4 mb-8">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="referrals">Referrals</TabsTrigger>
+              <TabsTrigger value="leaderboard">Leaderboard</TabsTrigger>
               <TabsTrigger value={userType}>{userType === "influencer" ? "Creator Profile" : "Brand Analytics"}</TabsTrigger>
             </TabsList>
             
@@ -243,73 +286,17 @@ const Dashboard = () => {
                   </CardContent>
                 </Card>
                 
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Referral Stats</CardTitle>
-                    <CardDescription>Track your referral progress</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-2 gap-6">
-                      <div className="bg-lavender-50 p-6 rounded-lg text-center">
-                        <Users className="mx-auto h-8 w-8 text-lavender-600 mb-2" />
-                        <p className="text-sm text-lavender-600 font-medium">Total Referrals</p>
-                        <p className="text-3xl font-bold text-lavender-900">{totalReferrals}</p>
-                      </div>
-                      <div className="bg-lavender-50 p-6 rounded-lg text-center">
-                        <Award className="mx-auto h-8 w-8 text-lavender-600 mb-2" />
-                        <p className="text-sm text-lavender-600 font-medium">Rewards Earned</p>
-                        <p className="text-3xl font-bold text-lavender-900">{rewardsEarned}</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                <ReferralStats
+                  totalReferrals={totalReferrals}
+                  pendingReferrals={pendingReferrals}
+                  confirmedReferrals={confirmedReferrals}
+                  rewardsEarned={rewardsEarned}
+                  weeklyChange={weeklyChange}
+                  rank={userRank}
+                />
               </div>
               
-              <Card>
-                <CardHeader>
-                  <CardTitle>Rewards Program</CardTitle>
-                  <CardDescription>Earn rewards for successful referrals</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="relative">
-                    <div className="absolute left-0 top-1/2 right-0 h-0.5 bg-lavender-200" />
-                    <div className="relative flex justify-between">
-                      <div className="flex flex-col items-center">
-                        <div className="rounded-full bg-lavender-200 p-2 mb-2">
-                          <div className="rounded-full w-5 h-5 bg-lavender-600 flex items-center justify-center text-white text-xs">
-                            5
-                          </div>
-                        </div>
-                        <p className="text-xs text-lavender-600">Free Month</p>
-                      </div>
-                      <div className="flex flex-col items-center">
-                        <div className="rounded-full bg-lavender-200 p-2 mb-2">
-                          <div className="rounded-full w-5 h-5 bg-lavender-600 flex items-center justify-center text-white text-xs">
-                            10
-                          </div>
-                        </div>
-                        <p className="text-xs text-lavender-600">Pro Features</p>
-                      </div>
-                      <div className="flex flex-col items-center">
-                        <div className="rounded-full bg-lavender-200 p-2 mb-2">
-                          <div className="rounded-full w-5 h-5 bg-lavender-600 flex items-center justify-center text-white text-xs">
-                            25
-                          </div>
-                        </div>
-                        <p className="text-xs text-lavender-600">Annual Plan</p>
-                      </div>
-                      <div className="flex flex-col items-center">
-                        <div className="rounded-full bg-lavender-200 p-2 mb-2">
-                          <div className="rounded-full w-5 h-5 bg-lavender-600 flex items-center justify-center text-white text-xs">
-                            50
-                          </div>
-                        </div>
-                        <p className="text-xs text-lavender-600">Partner Status</p>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+              <ReferralRewards userReferrals={totalReferrals} />
               
               <Card>
                 <CardHeader>
@@ -332,6 +319,122 @@ const Dashboard = () => {
                         <Bar dataKey="referrals" name="Referrals" fill="var(--color-referrals)" />
                       </RechartBarChart>
                     </ChartContainer>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            
+            <TabsContent value="leaderboard" className="space-y-6">
+              <div className="flex justify-between items-center mb-4">
+                <div className="space-y-1">
+                  <h2 className="text-2xl font-bold text-lavender-800">Referral Leaderboard</h2>
+                  <p className="text-gray-600">Compete with other users and earn exclusive rewards!</p>
+                </div>
+                <div className="flex gap-3 items-center">
+                  <div className="flex items-center gap-2">
+                    <Label htmlFor="anonymous-toggle" className="text-sm">Anonymous Mode</Label>
+                    <Button 
+                      variant={anonymousMode ? "default" : "outline"}
+                      className="h-8 px-3"
+                      onClick={() => setAnonymousMode(!anonymousMode)}
+                    >
+                      {anonymousMode ? "On" : "Off"}
+                    </Button>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Label htmlFor="period-toggle" className="text-sm">Period</Label>
+                    <select 
+                      id="period-toggle"
+                      value={leaderboardPeriod}
+                      onChange={(e) => setLeaderboardPeriod(e.target.value as "weekly" | "monthly" | "all-time")}
+                      className="h-9 rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors"
+                    >
+                      <option value="weekly">Weekly</option>
+                      <option value="monthly">Monthly</option>
+                      <option value="all-time">All-Time</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="grid gap-6 md:grid-cols-[2fr_1fr]">
+                <ReferralLeaderboard 
+                  entries={prepareLeaderboardData()}
+                  period={leaderboardPeriod}
+                  userRank={userRank}
+                  totalReferrals={totalReferrals}
+                  anonymousMode={anonymousMode}
+                />
+                
+                <div className="space-y-6">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Leaderboard Rules</CardTitle>
+                      <CardDescription>How the competition works</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="space-y-2">
+                        <h4 className="font-medium text-sm">How to Earn Points</h4>
+                        <ul className="text-sm space-y-1 list-disc pl-5">
+                          <li>Each successful referral = 1 point</li>
+                          <li>Bonus points for premium user referrals</li>
+                          <li>Points reset for weekly/monthly contests</li>
+                        </ul>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <h4 className="font-medium text-sm">Rewards</h4>
+                        <ul className="text-sm space-y-1 list-disc pl-5">
+                          <li>Top 3 weekly winners get extra months free</li>
+                          <li>Monthly winners get premium features</li>
+                          <li>Top referrers get special badges</li>
+                        </ul>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Current Campaign</CardTitle>
+                      <CardDescription>Spring Invite Sprint</CardDescription>
+                    </CardHeader>
+                    <CardContent className="text-center p-6">
+                      <div className="bg-gradient-to-tr from-lavender-100 to-lavender-50 p-4 rounded-lg mb-4">
+                        <Award className="h-12 w-12 text-lavender-600 mx-auto mb-2" />
+                        <h3 className="text-lg font-bold text-lavender-900">Special Prize!</h3>
+                        <p className="text-sm text-lavender-700">This month's top referrer gets an exclusive 1-year subscription</p>
+                      </div>
+                      <p className="text-sm">Campaign ends in:</p>
+                      <p className="text-xl font-bold text-lavender-800 mt-1">14 days : 07 hours</p>
+                    </CardContent>
+                    <CardFooter>
+                      <Button className="w-full" onClick={copyReferralLink}>Share Your Link Now</Button>
+                    </CardFooter>
+                  </Card>
+                </div>
+              </div>
+              
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between pb-2">
+                  <div className="space-y-1">
+                    <CardTitle>Referral Tips & Strategies</CardTitle>
+                    <CardDescription>Maximize your referral success</CardDescription>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid gap-6 md:grid-cols-3">
+                    <div className="border border-lavender-100 p-4 rounded-lg">
+                      <h4 className="font-medium mb-2">Share on Social Media</h4>
+                      <p className="text-sm text-gray-600">Post about your positive experience with KreatorBoard and include your referral link.</p>
+                    </div>
+                    <div className="border border-lavender-100 p-4 rounded-lg">
+                      <h4 className="font-medium mb-2">Email Your Network</h4>
+                      <p className="text-sm text-gray-600">Send personalized emails to colleagues who might benefit from our platform.</p>
+                    </div>
+                    <div className="border border-lavender-100 p-4 rounded-lg">
+                      <h4 className="font-medium mb-2">Create Content</h4>
+                      <p className="text-sm text-gray-600">Make a tutorial video or blog post showing how KreatorBoard helps you.</p>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
