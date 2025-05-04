@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -63,29 +62,17 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				kreator: {
-					50: '#f0f9ff',
-					100: '#e0f2fe',
-					200: '#bae6fd',
-					300: '#7dd3fc',
-					400: '#38bdf8',
-					500: '#0ea5e9',
-					600: '#0284c7',
-					700: '#0369a1',
-					800: '#075985',
-					900: '#0c4a6e',
-				},
-				lavender: {
-					50: '#f5f3ff',
-					100: '#ede8f5',
-					200: '#e0d7fa',
-					300: '#c4b5f5',
-					400: '#a78dee',
-					500: '#8a63e3',
-					600: '#7091e6',
-					700: '#6941c6',
-					800: '#5e3fb9',
-					900: '#4c2889',
+				beige: {
+					50: '#fbfaf4',
+					100: '#f7f5e9',
+					200: '#f3f0df',
+					300: '#ede8d0',
+					400: '#e5dfc2',
+					500: '#d9d0a8',
+					600: '#c7bb8a',
+					700: '#b0a470',
+					800: '#9a8f61',
+					900: '#7d7553',
 				},
 				orange: {
 					50: '#fff8ed',
@@ -98,18 +85,6 @@ export default {
 					700: '#be3c08',
 					800: '#9a300e',
 					900: '#7e2a0f',
-				},
-				beige: {
-					50: '#fbfaf4',
-					100: '#f7f5e9',
-					200: '#f3f0df',
-					300: '#ede8d0',
-					400: '#e5dfc2',
-					500: '#d9d0a8',
-					600: '#c7bb8a',
-					700: '#b0a470',
-					800: '#9a8f61',
-					900: '#7d7553',
 				}
 			},
 			borderRadius: {

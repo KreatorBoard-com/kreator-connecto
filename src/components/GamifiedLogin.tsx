@@ -118,7 +118,7 @@ const GamifiedLogin = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 + index * 0.1, duration: 0.5 }}
-                    className="flex flex-col items-center text-center p-3 bg-white rounded-lg shadow-sm"
+                    className="flex flex-col items-center text-center p-3 bg-beige-50 rounded-lg shadow-sm border border-beige-200"
                   >
                     {benefit.icon}
                     <h3 className="font-medium text-orange-800 mt-2 mb-1">{benefit.title}</h3>
@@ -173,6 +173,28 @@ const GamifiedLogin = () => {
                 path="/sign-in" 
                 signUpUrl="/sign-up"
                 redirectUrl="/dashboard"
+                appearance={{
+                  variables: {
+                    colorPrimary: '#f97316',
+                    colorBackground: '#ede8d0',
+                    colorInputBackground: '#fbfaf4',
+                    colorAlphaShade: '#f97316',
+                    colorText: '#7e2a0f',
+                    colorTextSecondary: '#9a300e',
+                    colorInputText: '#7e2a0f'
+                  },
+                  elements: {
+                    card: "bg-beige-100 border-beige-200",
+                    headerTitle: "text-orange-900",
+                    headerSubtitle: "text-orange-700",
+                    formButtonPrimary: "bg-orange-500 hover:bg-orange-600 text-white",
+                    formFieldInput: "bg-beige-50 border-beige-200",
+                    footerActionLink: "text-orange-600 hover:text-orange-700",
+                    socialButtonsBlockButton: "border-orange-300 hover:bg-beige-200",
+                    dividerLine: "bg-beige-300",
+                    dividerText: "text-orange-700",
+                  }
+                }}
               />
             </motion.div>
             
@@ -185,7 +207,7 @@ const GamifiedLogin = () => {
               <Button 
                 variant="ghost" 
                 onClick={() => setStep(0)}
-                className="text-orange-600 hover:text-orange-700 hover:bg-orange-100"
+                className="text-orange-600 hover:text-orange-700 hover:bg-beige-200"
               >
                 Back to Welcome
               </Button>
