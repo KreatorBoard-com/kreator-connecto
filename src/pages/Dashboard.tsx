@@ -1,14 +1,104 @@
 
+import { useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
 import { Navigate } from "react-router-dom";
+import { 
+  Award, 
+  Share, 
+  Instagram, 
+  Twitter, 
+  Linkedin, 
+  Users,
+  BarChart,
+  Megaphone
+} from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsItem, TabsTrigger } from "@/components/ui/tabs";
+import { toast } from "sonner";
+import { ChartContainer } from "@/components/ui/chart";
+import {
+  BarChart as RechartBarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+} from "recharts";
+
+// Mock data for the referral history - in a real app, this would come from your backend
+const mockReferralData = [
+  { month: 'Jan', referrals: 4 },
+  { month: 'Feb', referrals: 3 },
+  { month: 'Mar', referrals: 5 },
+  { month: 'Apr', referrals: 7 },
+  { month: 'May', referrals: 2 },
+];
+
+// Mock data for the influencer's audience demographics
+const mockAudienceData = [
+  { age: '18-24', percent: 35 },
+  { age: '25-34', percent: 45 },
+  { age: '35-44', percent: 15 },
+  { age: '45+', percent: 5 },
+];
 
 const Dashboard = () => {
   const { isLoaded, isSignedIn, user } = useUser();
+  const [referralLink, setReferralLink] = useState("");
+  const [userType, setUserType] = useState("influencer"); // Can be "influencer" or "brand"
+  const [totalReferrals, setTotalReferrals] = useState(21);
+  const [rewardsEarned, setRewardsEarned] = useState(2);
+  
+  useEffect(() => {
+    if (isSignedIn && user) {
+      // In a real application, you would fetch this from your database
+      // For now, we'll create a mock referral link based on the user's ID
+      setReferralLink(`https://kreatorboard.com/join?ref=${user.id}`);
+      
+      // Simulate determining user type (this would come from your database)
+      // For this demo, we'll use a random selection
+      setUserType(Math.random() > 0.5 ? "influencer" : "brand");
+    }
+  }, [isSignedIn, user]);
+
+  const copyReferralLink = () => {
+    navigator.clipboard.writeText(referralLink);
+    toast.success("Referral link copied to clipboard!");
+  };
+
+  const shareOnSocial = (platform) => {
+    // In a real app, this would use the Web Share API or platform-specific sharing
+    const shareText = `Join me on KreatorBoard, the ultimate platform for creators and brands! ${referralLink}`;
+    let shareUrl = '';
+    
+    switch(platform) {
+      case 'twitter':
+        shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
+        break;
+      case 'linkedin':
+        shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(referralLink)}&title=${encodeURIComponent('Join me on KreatorBoard!')}`;
+        break;
+      case 'instagram':
+        // Instagram doesn't have a web share API, so we'll just copy the text
+        navigator.clipboard.writeText(shareText);
+        toast.success("Caption copied! Open Instagram to share.");
+        return;
+    }
+    
+    if (shareUrl) {
+      window.open(shareUrl, '_blank');
+    }
+  };
 
   if (!isLoaded) {
-    return <div>Loading...</div>;
+    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
   }
   
   if (!isSignedIn) {
@@ -19,48 +109,477 @@ const Dashboard = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-grow container mx-auto px-4 py-16">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <h1 className="text-3xl font-bold text-lavender-800 mb-6">
             Welcome to your KreatorBoard Dashboard, {user.firstName}!
           </h1>
           
-          <div className="bg-white rounded-lg shadow-sm border border-lavender-200 p-6">
-            <div className="mb-6">
-              <h2 className="text-xl font-semibold text-lavender-700 mb-3">
-                Account Overview
-              </h2>
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="bg-lavender-50 p-4 rounded-md">
-                  <p className="text-sm text-lavender-600 font-medium">Email</p>
-                  <p className="text-lavender-900">{user.primaryEmailAddress?.emailAddress}</p>
-                </div>
-                <div className="bg-lavender-50 p-4 rounded-md">
-                  <p className="text-sm text-lavender-600 font-medium">User ID</p>
-                  <p className="text-lavender-900">{user.id}</p>
-                </div>
-              </div>
-            </div>
+          <Tabs defaultValue="overview" className="w-full">
+            <TabsList className="grid grid-cols-3 mb-8">
+              <TabsTrigger value="overview">Overview</TabsTrigger>
+              <TabsTrigger value="referrals">Referrals</TabsTrigger>
+              <TabsTrigger value={userType}>{userType === "influencer" ? "Creator Profile" : "Brand Analytics"}</TabsTrigger>
+            </TabsList>
             
-            <div>
-              <h2 className="text-xl font-semibold text-lavender-700 mb-3">
-                Your KreatorBoard Stats
-              </h2>
-              <div className="grid gap-4 md:grid-cols-3">
-                <div className="bg-lavender-50 p-4 rounded-md text-center">
-                  <p className="text-sm text-lavender-600 font-medium">Campaigns</p>
-                  <p className="text-2xl font-bold text-lavender-900">0</p>
-                </div>
-                <div className="bg-lavender-50 p-4 rounded-md text-center">
-                  <p className="text-sm text-lavender-600 font-medium">Connections</p>
-                  <p className="text-2xl font-bold text-lavender-900">0</p>
-                </div>
-                <div className="bg-lavender-50 p-4 rounded-md text-center">
-                  <p className="text-sm text-lavender-600 font-medium">Messages</p>
-                  <p className="text-2xl font-bold text-lavender-900">0</p>
-                </div>
+            <TabsContent value="overview" className="space-y-6">
+              <div className="grid gap-6 md:grid-cols-2">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Account Overview</CardTitle>
+                    <CardDescription>Your KreatorBoard account information</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div>
+                        <Label>Name</Label>
+                        <div className="text-lg font-medium">{user.firstName} {user.lastName}</div>
+                      </div>
+                      <div>
+                        <Label>Email</Label>
+                        <div className="text-lg">{user.primaryEmailAddress?.emailAddress}</div>
+                      </div>
+                      <div>
+                        <Label>Account Type</Label>
+                        <div className="text-lg capitalize">{userType}</div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Your KreatorBoard Stats</CardTitle>
+                    <CardDescription>Summary of your activity</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid gap-4 md:grid-cols-3">
+                      <div className="bg-lavender-50 p-4 rounded-md text-center">
+                        <p className="text-sm text-lavender-600 font-medium">Campaigns</p>
+                        <p className="text-2xl font-bold text-lavender-900">0</p>
+                      </div>
+                      <div className="bg-lavender-50 p-4 rounded-md text-center">
+                        <p className="text-sm text-lavender-600 font-medium">Connections</p>
+                        <p className="text-2xl font-bold text-lavender-900">0</p>
+                      </div>
+                      <div className="bg-lavender-50 p-4 rounded-md text-center">
+                        <p className="text-sm text-lavender-600 font-medium">Messages</p>
+                        <p className="text-2xl font-bold text-lavender-900">0</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
               </div>
-            </div>
-          </div>
+              
+              <Card>
+                <CardHeader>
+                  <CardTitle>Connect Your Accounts</CardTitle>
+                  <CardDescription>Link your social media and other platforms</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <Button variant="outline" className="h-20 flex flex-col gap-2">
+                      <Instagram className="h-6 w-6" />
+                      <span>Instagram</span>
+                    </Button>
+                    <Button variant="outline" className="h-20 flex flex-col gap-2">
+                      <Twitter className="h-6 w-6" />
+                      <span>Twitter</span>
+                    </Button>
+                    <Button variant="outline" className="h-20 flex flex-col gap-2">
+                      <Linkedin className="h-6 w-6" />
+                      <span>LinkedIn</span>
+                    </Button>
+                    <Button variant="outline" className="h-20 flex flex-col gap-2">
+                      <Share className="h-6 w-6" />
+                      <span>TikTok</span>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            
+            <TabsContent value="referrals" className="space-y-6">
+              <div className="grid gap-6 md:grid-cols-2">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Your Referral Link</CardTitle>
+                    <CardDescription>Share this link to invite others to KreatorBoard</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex space-x-2">
+                      <Input 
+                        value={referralLink} 
+                        readOnly 
+                        className="flex-1"
+                      />
+                      <Button onClick={copyReferralLink}>Copy</Button>
+                    </div>
+                    <div className="grid grid-cols-3 gap-4">
+                      <Button 
+                        variant="outline" 
+                        className="flex items-center gap-2"
+                        onClick={() => shareOnSocial('twitter')}
+                      >
+                        <Twitter size={16} />
+                        <span>Twitter</span>
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        className="flex items-center gap-2"
+                        onClick={() => shareOnSocial('instagram')}
+                      >
+                        <Instagram size={16} />
+                        <span>Instagram</span>
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        className="flex items-center gap-2"
+                        onClick={() => shareOnSocial('linkedin')}
+                      >
+                        <Linkedin size={16} />
+                        <span>LinkedIn</span>
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Referral Stats</CardTitle>
+                    <CardDescription>Track your referral progress</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-2 gap-6">
+                      <div className="bg-lavender-50 p-6 rounded-lg text-center">
+                        <Users className="mx-auto h-8 w-8 text-lavender-600 mb-2" />
+                        <p className="text-sm text-lavender-600 font-medium">Total Referrals</p>
+                        <p className="text-3xl font-bold text-lavender-900">{totalReferrals}</p>
+                      </div>
+                      <div className="bg-lavender-50 p-6 rounded-lg text-center">
+                        <Award className="mx-auto h-8 w-8 text-lavender-600 mb-2" />
+                        <p className="text-sm text-lavender-600 font-medium">Rewards Earned</p>
+                        <p className="text-3xl font-bold text-lavender-900">{rewardsEarned}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+              
+              <Card>
+                <CardHeader>
+                  <CardTitle>Rewards Program</CardTitle>
+                  <CardDescription>Earn rewards for successful referrals</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="relative">
+                    <div className="absolute left-0 top-1/2 right-0 h-0.5 bg-lavender-200" />
+                    <div className="relative flex justify-between">
+                      <div className="flex flex-col items-center">
+                        <div className="rounded-full bg-lavender-200 p-2 mb-2">
+                          <div className="rounded-full w-5 h-5 bg-lavender-600 flex items-center justify-center text-white text-xs">
+                            5
+                          </div>
+                        </div>
+                        <p className="text-xs text-lavender-600">Free Month</p>
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <div className="rounded-full bg-lavender-200 p-2 mb-2">
+                          <div className="rounded-full w-5 h-5 bg-lavender-600 flex items-center justify-center text-white text-xs">
+                            10
+                          </div>
+                        </div>
+                        <p className="text-xs text-lavender-600">Pro Features</p>
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <div className="rounded-full bg-lavender-200 p-2 mb-2">
+                          <div className="rounded-full w-5 h-5 bg-lavender-600 flex items-center justify-center text-white text-xs">
+                            25
+                          </div>
+                        </div>
+                        <p className="text-xs text-lavender-600">Annual Plan</p>
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <div className="rounded-full bg-lavender-200 p-2 mb-2">
+                          <div className="rounded-full w-5 h-5 bg-lavender-600 flex items-center justify-center text-white text-xs">
+                            50
+                          </div>
+                        </div>
+                        <p className="text-xs text-lavender-600">Partner Status</p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardHeader>
+                  <CardTitle>Referral History</CardTitle>
+                  <CardDescription>Your referral performance over time</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="h-80">
+                    <ChartContainer 
+                      config={{
+                        referrals: { color: "#9b87f5" }
+                      }}
+                    >
+                      <RechartBarChart data={mockReferralData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="month" />
+                        <YAxis />
+                        <Tooltip />
+                        <Legend />
+                        <Bar dataKey="referrals" name="Referrals" fill="var(--color-referrals)" />
+                      </RechartBarChart>
+                    </ChartContainer>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            
+            <TabsContent value="influencer" className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Creator Profile</CardTitle>
+                  <CardDescription>Your influence statistics and audience insights</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-8">
+                  <div className="grid gap-6 md:grid-cols-3">
+                    <div className="bg-lavender-50 p-4 rounded-md text-center">
+                      <p className="text-sm text-lavender-600 font-medium">Total Reach</p>
+                      <p className="text-2xl font-bold text-lavender-900">12.5K</p>
+                    </div>
+                    <div className="bg-lavender-50 p-4 rounded-md text-center">
+                      <p className="text-sm text-lavender-600 font-medium">Engagement Rate</p>
+                      <p className="text-2xl font-bold text-lavender-900">4.7%</p>
+                    </div>
+                    <div className="bg-lavender-50 p-4 rounded-md text-center">
+                      <p className="text-sm text-lavender-600 font-medium">Avg. Campaign Value</p>
+                      <p className="text-2xl font-bold text-lavender-900">$750</p>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-lg font-medium mb-4">Audience Demographics</h3>
+                    <div className="h-64">
+                      <ChartContainer 
+                        config={{
+                          audience: { color: "#9b87f5" }
+                        }}
+                      >
+                        <RechartBarChart data={mockAudienceData}>
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis dataKey="age" />
+                          <YAxis />
+                          <Tooltip />
+                          <Bar dataKey="percent" name="Audience %" fill="var(--color-audience)" />
+                        </RechartBarChart>
+                      </ChartContainer>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <h3 className="text-lg font-medium mb-4">Content Categories</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {["Beauty", "Lifestyle", "Fitness", "Tech", "Travel"].map(category => (
+                        <div key={category} className="px-4 py-2 bg-lavender-100 text-lavender-800 rounded-full text-sm">
+                          {category}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardHeader>
+                  <CardTitle>Campaign Opportunities</CardTitle>
+                  <CardDescription>Brands looking for creators like you</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {[1, 2, 3].map(i => (
+                      <div key={i} className="p-4 border border-lavender-200 rounded-lg">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <h4 className="font-medium">Summer Collection Showcase</h4>
+                            <p className="text-sm text-gray-600">Fashion Brand #{i}</p>
+                          </div>
+                          <div className="bg-lavender-100 text-lavender-800 px-2 py-1 rounded text-xs">
+                            $500 - $1,500
+                          </div>
+                        </div>
+                        <p className="mt-2 text-sm">Looking for fashion creators to showcase our summer collection in creative ways.</p>
+                        <div className="mt-3 flex justify-end">
+                          <Button variant="outline" size="sm">View Details</Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            
+            <TabsContent value="brand" className="space-y-6">
+              <div className="grid gap-6 md:grid-cols-2">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Campaign Performance</CardTitle>
+                    <CardDescription>Overview of your marketing campaigns</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex justify-between items-center mb-6">
+                      <div>
+                        <p className="text-sm text-gray-500">Total Impressions</p>
+                        <p className="text-2xl font-bold">245.8K</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-500">Conversion Rate</p>
+                        <p className="text-2xl font-bold">3.2%</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-500">ROI</p>
+                        <p className="text-2xl font-bold">178%</p>
+                      </div>
+                    </div>
+                    <div className="h-60">
+                      <ChartContainer 
+                        config={{
+                          impressions: { color: "#9b87f5" },
+                          conversions: { color: "#7E69AB" }
+                        }}
+                      >
+                        <RechartBarChart data={[
+                          { name: 'Campaign 1', impressions: 95000, conversions: 2850 },
+                          { name: 'Campaign 2', impressions: 75000, conversions: 2250 },
+                          { name: 'Campaign 3', impressions: 45000, conversions: 1575 },
+                          { name: 'Campaign 4', impressions: 30800, conversions: 1078 },
+                        ]}>
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis dataKey="name" />
+                          <YAxis />
+                          <Tooltip />
+                          <Legend />
+                          <Bar dataKey="impressions" fill="var(--color-impressions)" />
+                          <Bar dataKey="conversions" fill="var(--color-conversions)" />
+                        </RechartBarChart>
+                      </ChartContainer>
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between pb-2">
+                    <div className="space-y-1">
+                      <CardTitle>Analytics</CardTitle>
+                      <CardDescription>Key performance metrics</CardDescription>
+                    </div>
+                    <BarChart className="h-4 w-4 text-lavender-600" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      {[
+                        { label: "Total Reach", value: "452.8K", change: "+12.3%" },
+                        { label: "Engagement", value: "27.5K", change: "+8.1%" },
+                        { label: "Click Through", value: "6.8%", change: "+2.4%" },
+                        { label: "Conversion", value: "3.2%", change: "+0.8%" }
+                      ].map((stat, index) => (
+                        <div key={index} className="flex items-center">
+                          <div className="w-1/3 text-sm font-medium">{stat.label}</div>
+                          <div className="w-1/3 text-right">{stat.value}</div>
+                          <div className={`w-1/3 text-right text-sm ${
+                            stat.change.startsWith('+') ? 'text-green-600' : 'text-red-600'
+                          }`}>
+                            {stat.change}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between pb-2">
+                  <div className="space-y-1">
+                    <CardTitle>Promotion Management</CardTitle>
+                    <CardDescription>Current and upcoming promotions</CardDescription>
+                  </div>
+                  <Megaphone className="h-4 w-4 text-lavender-600" />
+                </CardHeader>
+                <CardContent className="pt-6">
+                  <div className="space-y-5">
+                    {[
+                      {
+                        title: "Summer Collection Launch",
+                        status: "Active",
+                        creators: 12,
+                        budget: "$15,000",
+                        progress: 65
+                      },
+                      {
+                        title: "Back to School",
+                        status: "Scheduled",
+                        creators: 8,
+                        budget: "$8,500",
+                        progress: 0
+                      },
+                      {
+                        title: "Holiday Special",
+                        status: "Draft",
+                        creators: 0,
+                        budget: "$22,000",
+                        progress: 0
+                      }
+                    ].map((campaign, idx) => (
+                      <div key={idx} className="border border-lavender-200 rounded-lg p-4">
+                        <div className="flex justify-between items-center mb-3">
+                          <h3 className="font-medium">{campaign.title}</h3>
+                          <span className={`text-xs px-2 py-1 rounded ${
+                            campaign.status === 'Active' 
+                              ? 'bg-green-100 text-green-800' 
+                              : campaign.status === 'Scheduled'
+                              ? 'bg-blue-100 text-blue-800'
+                              : 'bg-gray-100 text-gray-800'
+                          }`}>
+                            {campaign.status}
+                          </span>
+                        </div>
+                        <div className="grid grid-cols-3 gap-3 text-sm mb-3">
+                          <div>
+                            <p className="text-gray-500">Creators</p>
+                            <p className="font-medium">{campaign.creators}</p>
+                          </div>
+                          <div>
+                            <p className="text-gray-500">Budget</p>
+                            <p className="font-medium">{campaign.budget}</p>
+                          </div>
+                          <div>
+                            <p className="text-gray-500">Progress</p>
+                            <p className="font-medium">{campaign.progress}%</p>
+                          </div>
+                        </div>
+                        {campaign.status === 'Active' && (
+                          <div className="w-full bg-gray-200 rounded-full h-1.5 mt-2">
+                            <div 
+                              className="bg-lavender-600 h-1.5 rounded-full" 
+                              style={{ width: `${campaign.progress}%` }} 
+                            />
+                          </div>
+                        )}
+                        <div className="mt-4 flex justify-end">
+                          <Button variant="outline" size="sm">Manage</Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+                <CardFooter>
+                  <Button className="w-full">Create New Promotion</Button>
+                </CardFooter>
+              </Card>
+            </TabsContent>
+          </Tabs>
         </div>
       </main>
       <Footer />
