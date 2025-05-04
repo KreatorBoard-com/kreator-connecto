@@ -32,6 +32,7 @@ import { ChartContainer } from "@/components/ui/chart";
 import ReferralLeaderboard from "@/components/ReferralLeaderboard";
 import ReferralRewards from "@/components/ReferralRewards";
 import ReferralStats from "@/components/ReferralStats";
+import { useToast } from "@/hooks/use-toast";
 import {
   BarChart as RechartBarChart,
   Bar,
@@ -76,6 +77,7 @@ const mockLeaderboardEntries = [
 
 const Dashboard = () => {
   const { isLoaded, isSignedIn, user } = useUser();
+  const { toast: toastNotification } = useToast();
   const [referralLink, setReferralLink] = useState("");
   const [userType, setUserType] = useState("influencer"); // Can be "influencer" or "brand"
   const [totalReferrals, setTotalReferrals] = useState(21);
@@ -113,7 +115,7 @@ const Dashboard = () => {
   const joinVIPWaitlist = () => {
     setVipWaitlistJoined(true);
     setVipPoints(50);
-    toast({
+    toastNotification({
       title: "Welcome to the VIP Waitlist!",
       description: "You've earned 50 points for joining. Complete tasks to climb the ranks!",
       variant: "achievement",
@@ -128,21 +130,21 @@ const Dashboard = () => {
     // Check if we should level up
     if (newPoints >= 200 && vipLevel < 1) {
       setVipLevel(1);
-      toast({
+      toastNotification({
         title: "Level Up! 🎉",
         description: "You're now VIP Bronze tier with early access to new features!",
         variant: "achievement",
       });
     } else if (newPoints >= 500 && vipLevel < 2) {
       setVipLevel(2);
-      toast({
+      toastNotification({
         title: "Level Up! 🎉",
         description: "You're now VIP Silver tier with special perks and priority support!",
         variant: "achievement",
       });
     } else if (newPoints >= 1000 && vipLevel < 3) {
       setVipLevel(3);
-      toast({
+      toastNotification({
         title: "Level Up! 🎉",
         description: "You're now VIP Gold tier with exclusive features and premium benefits!",
         variant: "achievement",
